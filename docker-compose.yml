@@ -14,3 +14,16 @@ services:
       timeout: 3s
       retries: 3
 
+  app:
+    build: .
+    container_name: rateLimiterApp
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - REDIS_ADDR=redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
